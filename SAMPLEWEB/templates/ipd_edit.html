@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit IPD Patient</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #c8e6c9);
+      padding: 40px;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #00695c;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 10px;
+      border: 1.5px solid #009688;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #009688;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00796b;
+    }
+    .link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .link a {
+      color: #333;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .watermark {
+      text-align: right;
+      margin-top: 30px;
+      color: #aaa;
+      font-size: 14px;
+      font-weight: bold;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h2>✏️ Edit IPD Patient</h2>
+  <form method="POST">
+    <label>Patient Name:</label>
+    <input type="text" name="name" value="{{ entry.name }}" required>
+
+    <label>Age:</label>
+    <input type="number" name="age" value="{{ entry.age }}" required>
+
+    <label>Mobile:</label>
+    <input type="text" name="mobile" value="{{ entry.mobile }}" required>
+
+    <label>Reason:</label>
+    <input type="text" name="reason" value="{{ entry.reason }}" required>
+
+    <label>Address:</label>
+    <input type="text" name="address" value="{{ entry.address }}">
+
+    <label>Total Bill:</label>
+    <input type="number" name="total_bill" value="{{ entry.total_bill }}" required>
+
+    <label>Payment Mode:</label>
+    <select name="payment_mode" required>
+      <option value="">--Select--</option>
+      <option value="Cash" {% if entry.payment_mode == 'Cash' %}selected{% endif %}>Cash</option>
+      <option value="Online" {% if entry.payment_mode == 'Online' %}selected{% endif %}>Online</option>
+    </select>
+
+    <button type="submit">💾 Save Changes</button>
+  </form>
+
+  <div class="link">
+    <a href="/ipd-records">📋 Back to IPD Records</a>
+  </div>
+
+  <div class="watermark">© Tapasya Hospital 2025</div>
+</div>
+
+</body>
+</html>
