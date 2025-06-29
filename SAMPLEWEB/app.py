@@ -7,9 +7,10 @@ app = Flask(__name__)
 data = []              # OPD Patients
 ipd_data = []          # IPD Patients
 ARCHIVE_DIR = "archives"
+STATIC_DIR = "static"
 
-if not os.path.exists(ARCHIVE_DIR):
-    os.makedirs(ARCHIVE_DIR)
+os.makedirs(ARCHIVE_DIR, exist_ok=True)
+os.makedirs(STATIC_DIR, exist_ok=True)
 
 def reset_daily_records():
     today = date.today().strftime("%Y-%m-%d")
@@ -32,11 +33,11 @@ def reset_daily_records():
 @app.route('/')
 def home():
     reset_daily_records()
-    return render_template('intro.html')  # ✅ show intro when opened directly
+    return render_template('intro.html')  # Show intro first
 
 @app.route('/start')
 def start():
-    return render_template('index.html')  # ✅ OPD form when clicked Home
+    return render_template('index.html')  # OPD form
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -83,10 +84,8 @@ def delete(index):
 
 @app.route('/export')
 def export():
-    os.makedirs("static", exist_ok=True)
-    filename = os.path.join("static", "current_patients.csv")
+    filename = os.path.join(STATIC_DIR, "current_patients.csv")
 
-    # Add Sr No and clean Date field
     export_data = []
     for i, entry in enumerate(data, start=1):
         export_data.append({
@@ -98,7 +97,7 @@ def export():
             "Address": entry['address'],
             "Fees": entry['fees'],
             "Payment Mode": entry['payment_mode'],
-            "Date": entry['date'].split()[0]  # only date part
+            "Date": entry['date'].split()[0]
         })
 
     with open(filename, "w", newline='') as f:
@@ -108,7 +107,7 @@ def export():
         writer.writeheader()
         writer.writerows(export_data)
 
-    return send_file(filename, as_attachment=True)
+    return send_file(open(filename, 'rb'), as_attachment=True, download_name="current_patients.csv")
 
 @app.route('/old-records')
 def old_records():
