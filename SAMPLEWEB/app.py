@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, send_file
+from flask import Flask, render_template, request, redirect, Response
 from datetime import datetime, date
 import os
 import csv
+from io import StringIO
 
 app = Flask(__name__)
 data = []              # OPD Patients
@@ -83,11 +84,14 @@ def delete(index):
 
 @app.route('/export')
 def export():
-    os.makedirs("static", exist_ok=True)
-    filename = os.path.join("static", "current_patients.csv")
-    export_data = []
+    si = StringIO()
+    writer = csv.DictWriter(si, fieldnames=[
+        "Sr No", "Name", "Age", "Mobile", "Reason", "Address", "Fees", "Payment Mode", "Date"
+    ])
+    writer.writeheader()
+
     for i, entry in enumerate(data, start=1):
-        export_data.append({
+        writer.writerow({
             "Sr No": i,
             "Name": entry['name'],
             "Age": entry['age'],
@@ -98,13 +102,11 @@ def export():
             "Payment Mode": entry['payment_mode'],
             "Date": entry['date'].split()[0]
         })
-    with open(filename, "w", newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=[
-            "Sr No", "Name", "Age", "Mobile", "Reason", "Address", "Fees", "Payment Mode", "Date"
-        ])
-        writer.writeheader()
-        writer.writerows(export_data)
-    return send_file(filename, as_attachment=True)
+
+    output = si.getvalue()
+    response = Response(output, mimetype='text/csv')
+    response.headers.set("Content-Disposition", "attachment", filename="current_patients.csv")
+    return response
 
 @app.route('/old-records')
 def old_records():
