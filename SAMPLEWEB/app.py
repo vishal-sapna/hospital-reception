@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, Response
 from datetime import datetime, date
+from pytz import timezone
 import os
 import csv
 from io import StringIO
@@ -12,8 +13,11 @@ ARCHIVE_DIR = "archives"
 if not os.path.exists(ARCHIVE_DIR):
     os.makedirs(ARCHIVE_DIR)
 
+def current_indian_time():
+    return datetime.now(timezone("Asia/Kolkata")).strftime("%d-%m-%Y %H:%M")
+
 def reset_daily_records():
-    today = date.today().strftime("%Y-%m-%d")
+    today = datetime.now(timezone("Asia/Kolkata")).strftime("%Y-%m-%d")
     archive_file = os.path.join(ARCHIVE_DIR, f"{today}.csv")
     flag_file = os.path.join(ARCHIVE_DIR, f"{today}.flag")
 
@@ -49,7 +53,7 @@ def submit():
         'address': request.form.get('address', ''),
         'fees': request.form['fees'],
         'payment_mode': request.form['payment_mode'],
-        'date': datetime.now().strftime("%d-%m-%Y %H:%M")
+        'date': current_indian_time()
     }
     data.append(entry)
     return redirect('/records')
@@ -129,7 +133,7 @@ def ipd():
             'address': request.form.get('address', ''),
             'total_bill': request.form['total_bill'],
             'payment_mode': request.form['payment_mode'],
-            'date': datetime.now().strftime("%d-%m-%Y %H:%M")
+            'date': current_indian_time()
         }
         ipd_data.append(entry)
         return redirect('/ipd-records')
