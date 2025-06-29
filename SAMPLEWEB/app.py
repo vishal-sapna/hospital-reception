@@ -7,10 +7,9 @@ app = Flask(__name__)
 data = []              # OPD Patients
 ipd_data = []          # IPD Patients
 ARCHIVE_DIR = "archives"
-STATIC_DIR = "static"
 
-os.makedirs(ARCHIVE_DIR, exist_ok=True)
-os.makedirs(STATIC_DIR, exist_ok=True)
+if not os.path.exists(ARCHIVE_DIR):
+    os.makedirs(ARCHIVE_DIR)
 
 def reset_daily_records():
     today = date.today().strftime("%Y-%m-%d")
@@ -18,7 +17,7 @@ def reset_daily_records():
     flag_file = os.path.join(ARCHIVE_DIR, f"{today}.flag")
 
     if os.path.exists(flag_file):
-        return  # Already archived today
+        return
 
     if data:
         with open(archive_file, "w", newline='') as f:
@@ -33,11 +32,11 @@ def reset_daily_records():
 @app.route('/')
 def home():
     reset_daily_records()
-    return render_template('intro.html')  # Show intro first
+    return render_template('intro.html')
 
 @app.route('/start')
 def start():
-    return render_template('index.html')  # OPD form
+    return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -49,7 +48,7 @@ def submit():
         'address': request.form.get('address', ''),
         'fees': request.form['fees'],
         'payment_mode': request.form['payment_mode'],
-        'date': datetime.now().strftime("%Y-%m-%d %H:%M")
+        'date': datetime.now().strftime("%d-%m-%Y %H:%M")
     }
     data.append(entry)
     return redirect('/records')
@@ -84,8 +83,8 @@ def delete(index):
 
 @app.route('/export')
 def export():
-    filename = os.path.join(STATIC_DIR, "current_patients.csv")
-
+    os.makedirs("static", exist_ok=True)
+    filename = os.path.join("static", "current_patients.csv")
     export_data = []
     for i, entry in enumerate(data, start=1):
         export_data.append({
@@ -99,15 +98,13 @@ def export():
             "Payment Mode": entry['payment_mode'],
             "Date": entry['date'].split()[0]
         })
-
     with open(filename, "w", newline='') as f:
         writer = csv.DictWriter(f, fieldnames=[
             "Sr No", "Name", "Age", "Mobile", "Reason", "Address", "Fees", "Payment Mode", "Date"
         ])
         writer.writeheader()
         writer.writerows(export_data)
-
-    return send_file(open(filename, 'rb'), as_attachment=True, download_name="current_patients.csv")
+    return send_file(filename, as_attachment=True)
 
 @app.route('/old-records')
 def old_records():
@@ -130,7 +127,7 @@ def ipd():
             'address': request.form.get('address', ''),
             'total_bill': request.form['total_bill'],
             'payment_mode': request.form['payment_mode'],
-            'date': datetime.now().strftime("%Y-%m-%d %H:%M")
+            'date': datetime.now().strftime("%d-%m-%Y %H:%M")
         }
         ipd_data.append(entry)
         return redirect('/ipd-records')
@@ -158,6 +155,24 @@ def move_to_ipd(index):
             f"&reason={entry['reason']}&address={entry['address']}"
         )
     return redirect('/records')
+
+@app.route('/ipd-edit/<int:index>', methods=['GET', 'POST'])
+def ipd_edit(index):
+    if index < 0 or index >= len(ipd_data):
+        return redirect('/ipd-records')
+    if request.method == 'POST':
+        ipd_data[index] = {
+            'name': request.form['name'],
+            'age': request.form['age'],
+            'mobile': request.form['mobile'],
+            'reason': request.form['reason'],
+            'address': request.form.get('address', ''),
+            'total_bill': request.form['total_bill'],
+            'payment_mode': request.form['payment_mode'],
+            'date': ipd_data[index]['date']
+        }
+        return redirect('/ipd-records')
+    return render_template('ipd_edit.html', entry=ipd_data[index], index=index)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
