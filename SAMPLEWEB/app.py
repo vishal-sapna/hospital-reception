@@ -48,7 +48,7 @@ def submit():
         'address': request.form.get('address', ''),
         'fees': request.form['fees'],
         'payment_mode': request.form['payment_mode'],
-        'date': datetime.now().strftime("%d-%m-%Y %H:%M")
+        'date': datetime.now().strftime("%Y-%m-%d %H:%M")
     }
     data.append(entry)
     return redirect('/records')
@@ -83,13 +83,31 @@ def delete(index):
 
 @app.route('/export')
 def export():
-    filename = "current_patients.csv"
+    os.makedirs("static", exist_ok=True)
+    filename = os.path.join("static", "current_patients.csv")
+
+    # Add Sr No and clean Date field
+    export_data = []
+    for i, entry in enumerate(data, start=1):
+        export_data.append({
+            "Sr No": i,
+            "Name": entry['name'],
+            "Age": entry['age'],
+            "Mobile": entry['mobile'],
+            "Reason": entry['reason'],
+            "Address": entry['address'],
+            "Fees": entry['fees'],
+            "Payment Mode": entry['payment_mode'],
+            "Date": entry['date'].split()[0]  # only date part
+        })
+
     with open(filename, "w", newline='') as f:
         writer = csv.DictWriter(f, fieldnames=[
-            "name", "age", "mobile", "reason", "address", "fees", "payment_mode", "date"
+            "Sr No", "Name", "Age", "Mobile", "Reason", "Address", "Fees", "Payment Mode", "Date"
         ])
         writer.writeheader()
-        writer.writerows(data)
+        writer.writerows(export_data)
+
     return send_file(filename, as_attachment=True)
 
 @app.route('/old-records')
@@ -113,7 +131,7 @@ def ipd():
             'address': request.form.get('address', ''),
             'total_bill': request.form['total_bill'],
             'payment_mode': request.form['payment_mode'],
-            'date': datetime.now().strftime("%d-%m-%Y %H:%M")
+            'date': datetime.now().strftime("%Y-%m-%d %H:%M")
         }
         ipd_data.append(entry)
         return redirect('/ipd-records')
