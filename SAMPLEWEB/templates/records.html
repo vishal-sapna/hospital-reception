@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Records - Hospital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #f2f6fc, #dbe9f4);
+            color: #333;
+            padding-bottom: 60px;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .actions a {
+            margin-right: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .top-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .top-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: 600;
+            color: #34495e;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #aaa;
+            transform: rotate(-15deg);
+            opacity: 0.6;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>📝 All Patient Records</header>
+
+<div class="container">
+    <div class="title">Registered OPD Patients</div>
+
+    <div class="top-links">
+        <a href="/export">📤 Export CSV</a>
+        <a href="/old-records">📂 Old Records</a>
+        <a href="/">🏠 Home</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th><th>Age</th><th>Mobile</th><th>Reason</th><th>Address</th>
+                <th>Fees</th><th>Payment</th><th>Time</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in data %}
+            <tr>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.age }}</td>
+                <td>{{ entry.mobile }}</td>
+                <td>{{ entry.reason }}</td>
+                <td>{{ entry.address }}</td>
+                <td>{{ entry.fees }}</td>
+                <td>{{ entry.payment_mode }}</td>
+                <td>{{ entry.date }}</td>
+                <td class="actions">
+                    <a href="/edit/{{ loop.index0 }}">✏️</a>
+                    <a href="/delete/{{ loop.index0 }}">🗑️</a>
+                    <a href="/move-to-ipd/{{ loop.index0 }}">➡️ IPD</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="watermark">© Tapasya Hospital 2025</div>
+
+</body>
+</html>

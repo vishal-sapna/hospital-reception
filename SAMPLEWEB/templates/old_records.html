@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Old Patient Records</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 30px;
+            background: linear-gradient(to right, #f4f8fc, #e8f1f8);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h3 {
+            margin-top: 50px;
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background: #3498db;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .back {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .back a {
+            font-weight: 600;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #aaa;
+            transform: rotate(-15deg);
+            opacity: 0.6;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>📂 Archived Patient Records (Daily)</h2>
+
+{% for filename, rows in records.items() %}
+    <h3>📅 {{ filename.replace('.csv','') }}</h3>
+    <table>
+        <tr>
+            <th>Name</th><th>Age</th><th>Mobile</th><th>Reason</th>
+            <th>Address</th><th>Fees</th><th>Payment</th><th>Time</th>
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.name }}</td>
+            <td>{{ row.age }}</td>
+            <td>{{ row.mobile }}</td>
+            <td>{{ row.reason }}</td>
+            <td>{{ row.address }}</td>
+            <td>{{ row.fees }}</td>
+            <td>{{ row.payment_mode }}</td>
+            <td>{{ row.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endfor %}
+
+<div class="back"><a href="/">🔙 Back to Home</a></div>
+<div class="watermark">© Tapasya Hospital 2025</div>
+
+</body>
+</html>

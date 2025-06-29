@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Patient Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #fceabb, #f8b500);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #e67e22;
+            color: #fff;
+            padding: 25px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 600px;
+            background: #fff;
+            margin: 40px auto;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        h2 { margin-bottom: 20px; text-align: center; }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 2px solid #e67e22;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        input[name="name"] {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 14px;
+            background-color: #e67e22;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #cf711f;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .link a {
+            color: #2c3e50;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #aaa;
+            transform: rotate(-15deg);
+            opacity: 0.6;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>✏️ Edit Patient Information</header>
+
+<div class="container">
+    <h2>Update Patient Details</h2>
+    <form method="POST">
+        <label>Patient Name:</label>
+        <input type="text" name="name" value="{{ entry.name }}" required>
+
+        <label>Age:</label>
+        <input type="number" name="age" value="{{ entry.age }}" required>
+
+        <label>Mobile Number:</label>
+        <input type="text" name="mobile" value="{{ entry.mobile }}" required>
+
+        <label>Reason for Visit:</label>
+        <input type="text" name="reason" value="{{ entry.reason }}" required>
+
+        <label>Address (optional):</label>
+        <input type="text" name="address" value="{{ entry.address }}">
+
+        <label>Fees Paid (₹):</label>
+        <input type="number" name="fees" value="{{ entry.fees }}" required>
+
+        <label>Payment Mode:</label>
+        <select name="payment_mode" required>
+            <option value="">--Select--</option>
+            <option value="Cash" {% if entry.payment_mode == "Cash" %}selected{% endif %}>Cash</option>
+            <option value="Online" {% if entry.payment_mode == "Online" %}selected{% endif %}>Online</option>
+        </select>
+
+        <button type="submit">💾 Update Details</button>
+    </form>
+
+    <div class="link">
+        <a href="/records">📋 Back to Records</a>
+    </div>
+</div>
+
+<div class="watermark">© Tapasya Hospital 2025</div>
+
+</body>
+</html>

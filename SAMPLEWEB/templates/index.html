@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospital Reception - Patient Entry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #e0eafc, #cfdef3);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #34495e;
+            color: #fff;
+            padding: 25px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 600px;
+            background: #fff;
+            margin: 40px auto;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        input[name="name"] {
+            border: 2px solid #3498db;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 14px;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2b82c9;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .link a {
+            color: #2c3e50;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .qr-box {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .qr-box img {
+            max-width: 180px;
+            margin-top: 10px;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #aaa;
+            transform: rotate(-15deg);
+            opacity: 0.6;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function togglePayment() {
+            const mode = document.getElementById("payment_mode").value;
+            const qrBox = document.getElementById("qr_box");
+            qrBox.style.display = (mode === "Online") ? "block" : "none";
+        }
+    </script>
+</head>
+<body>
+
+<header>🏥 Tapasya Hospital Reception Portal</header>
+
+<div class="container">
+    <h2>New Patient Entry Form</h2>
+    <form method="POST" action="/submit">
+        <label>Patient Name:</label>
+        <input type="text" name="name" required>
+
+        <label>Age:</label>
+        <input type="number" name="age" required>
+
+        <label>Mobile Number:</label>
+        <input type="text" name="mobile" required>
+
+        <label>Reason for Visit:</label>
+        <input type="text" name="reason" required>
+
+        <label>Address (optional):</label>
+        <input type="text" name="address">
+
+        <label>Fees Paid (₹):</label>
+        <input type="number" name="fees" required>
+
+        <label>Payment Mode:</label>
+        <select name="payment_mode" id="payment_mode" onchange="togglePayment()" required>
+            <option value="">--Select--</option>
+            <option value="Cash">Cash</option>
+            <option value="Online">Online</option>
+        </select>
+
+        <div class="qr-box" id="qr_box">
+            <p><strong>Scan to Pay (UPI):</strong></p>
+            <img src="{{ url_for('static', filename='qr.png') }}" alt="UPI QR Code">
+            <p><strong>UPI ID:</strong> 9552121633@axl / 9552121633@ybl</p>
+        </div>
+
+        <button type="submit">Submit Entry ✅</button>
+    </form>
+
+    <div class="link">
+        <a href="/records">📋 View All Records</a>
+    </div>
+</div>
+
+<div class="watermark">© Tapasya Hospital 2025</div>
+
+</body>
+</html>
