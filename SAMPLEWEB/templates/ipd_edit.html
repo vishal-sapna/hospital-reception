@@ -1,118 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Edit IPD Patient</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #c8e6c9);
-      padding: 40px;
-    }
-    .form-container {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 14px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #00695c;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-      font-weight: 600;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 10px;
-      border: 1.5px solid #009688;
-      font-size: 16px;
-    }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background-color: #009688;
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #00796b;
-    }
-    .link {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .link a {
-      color: #333;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .watermark {
-      text-align: right;
-      margin-top: 30px;
-      color: #aaa;
-      font-size: 14px;
-      font-weight: bold;
-      opacity: 0.6;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Edit IPD Patient</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7209b7;
+            --secondary: #560bad;
+            --accent: #b5179e;
+            --dark: #1b263b;
+            --light: #f8f9fa;
+            --gray: #adb5bd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f9f0ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .form-header h2 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(114, 9, 183, 0.1);
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .back-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link a:hover {
+            color: var(--secondary);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: auto;
+            padding: 1.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-
-<div class="form-container">
-  <h2>✏️ Edit IPD Patient</h2>
-  <form method="POST">
-    <label>Patient Name:</label>
-    <input type="text" name="name" value="{{ entry.name }}" required>
-
-    <label>Age:</label>
-    <input type="number" name="age" value="{{ entry.age }}" required>
-
-    <label>Mobile:</label>
-    <input type="text" name="mobile" value="{{ entry.mobile }}" required>
-
-    <label>Reason:</label>
-    <input type="text" name="reason" value="{{ entry.reason }}" required>
-
-    <label>Address:</label>
-    <input type="text" name="address" value="{{ entry.address }}">
-
-    <label>Total Bill:</label>
-    <input type="number" name="total_bill" value="{{ entry.total_bill }}" required>
-
-    <label>Payment Mode:</label>
-    <select name="payment_mode" required>
-      <option value="">--Select--</option>
-      <option value="Cash" {% if entry.payment_mode == 'Cash' %}selected{% endif %}>Cash</option>
-      <option value="Online" {% if entry.payment_mode == 'Online' %}selected{% endif %}>Online</option>
-    </select>
-
-    <button type="submit">💾 Save Changes</button>
-  </form>
-
-  <div class="link">
-    <a href="/ipd-records">📋 Back to IPD Records</a>
-  </div>
-
-  <div class="watermark">© Tapasya Hospital 2025</div>
-</div>
-
+    <div class="form-container">
+        <div class="form-header">
+            <h2>
+                <i class="fas fa-user-edit"></i>
+                Edit IPD Patient
+            </h2>
+        </div>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="name">Patient Name</label>
+                <input type="text" id="name" name="name" value="{{ entry.name }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" value="{{ entry.age }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="text" id="mobile" name="mobile" value="{{ entry.mobile }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="reason">Reason for Admission</label>
+                <input type="text" id="reason" name="reason" value="{{ entry.reason }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Address (Optional)</label>
+                <input type="text" id="address" name="address" value="{{ entry.address }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="total_bill">Total Bill Amount</label>
+                <input type="number" id="total_bill" name="total_bill" value="{{ entry.total_bill }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="payment_mode">Payment Mode</label>
+                <select id="payment_mode" name="payment_mode" required>
+                    <option value="">Select Payment Mode</option>
+                    <option value="Cash" {% if entry.payment_mode == 'Cash' %}selected{% endif %}>Cash</option>
+                    <option value="Online" {% if entry.payment_mode == 'Online' %}selected{% endif %}>Online</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-save"></i>
+                Save Changes
+            </button>
+        </form>
+        
+        <div class="back-link">
+            <a href="/ipd-records">
+                <i class="fas fa-arrow-left"></i>
+                Back to IPD Records
+            </a>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 Hospital Management System. All rights reserved.</p>
+    </div>
 </body>
 </html>

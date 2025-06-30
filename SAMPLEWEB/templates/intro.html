@@ -2,98 +2,331 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tapasya Hospital</title>
+    <title>Tapasya Hospital - Patient Entry</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap');
-        body {
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #1e40af;
+            --text: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to right, #e0f2f1, #f1f8e9);
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 600;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            gap: 0.5rem;
         }
-        .top-bar {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            padding: 12px 20px;
-            background: #004d40;
-            color: white;
-            display: flex;
-            justify-content: space-between;
+
+        .container {
+            max-width: 100%;
+            padding: 1rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-title {
+            font-size: 1.25rem;
             font-weight: 600;
-        }
-        .logo {
-            margin-top: 60px;
-            animation: zoomIn 1s ease-in-out;
-        }
-        .logo img {
-            max-width: 180px;
-        }
-        .welcome {
-            margin-top: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #00695c;
-            animation: fadeInUp 1.5s ease-out;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
             text-align: center;
+            position: relative;
         }
-        .developed {
+
+        .form-title::after {
+            content: '';
             position: absolute;
-            bottom: 10px;
-            font-size: 14px;
-            color: #888;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3rem;
+            height: 0.25rem;
+            background: var(--primary-light);
+            border-radius: 0.25rem;
         }
-        .start-btn {
-            margin-top: 30px;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            background-color: #00796b;
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 0.9375rem;
+            background-color: var(--light);
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        input[name="name"] {
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
             color: white;
-            border-radius: 8px;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .start-btn:hover {
-            background-color: #00695c;
+            margin-top: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        @keyframes zoomIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        .btn-submit:active {
+            transform: translateY(1px);
         }
 
-        @keyframes fadeInUp {
-            0% { transform: translateY(30px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+        .qr-box {
+            display: none;
+            margin-top: 1.5rem;
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--light);
+            border-radius: 0.5rem;
+            border: 1px dashed var(--border);
+        }
+
+        .qr-img {
+            max-width: 150px;
+            margin: 0.75rem auto;
+            border-radius: 0.5rem;
+        }
+
+        .upi-id {
+            font-size: 0.8125rem;
+            color: var(--text);
+            margin-top: 0.5rem;
+        }
+
+        .view-records {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .view-records a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .watermark {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* Payment mode indicator */
+        .payment-indicator {
+            position: absolute;
+            right: 0.75rem;
+            top: 2.25rem;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background: #e5e7eb;
+            transition: background 0.2s;
+        }
+
+        select:focus + .payment-indicator {
+            background: var(--primary);
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 28rem;
+                margin: 1rem auto;
+                padding: 1.5rem;
+            }
+            
+            header {
+                padding: 1rem 2rem;
+            }
+            
+            .header-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+            </svg>
+            <span>Tapasya Hospital</span>
+        </div>
+    </header>
 
-<div class="top-bar">
-    <div>   DR. Sujit Sir</div>
-    <div>Powered by Kautuk Sir</div>
-</div>
+    <div class="container">
+        <div class="form-card">
+            <h2 class="form-title">Patient Registration</h2>
+            
+            <form method="POST" action="/submit">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Patient's name" required>
+                </div>
 
-<div class="logo">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Hospital Logo">
-</div>
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" placeholder="Age" required>
+                </div>
 
-<div class="welcome">
-    🅦🅔🅛🅒🅞🅜🅔  ₜₒ<br>ᵀᵃᵖᵃˢʸᵃ ᴴᵒˢᵖⁱᵗᵃˡ ᴿᵉᶜᵉᵖᵗⁱᵒⁿ ᴾᵒʳᵗᵃˡ
-</div>
+                <div class="form-group">
+                    <label for="mobile">Mobile</label>
+                    <input type="tel" id="mobile" name="mobile" placeholder="Mobile number" required>
+                </div>
 
-<a href="/start"><button class="start-btn">Enter Portal 🟢</button></a>
+                <div class="form-group">
+                    <label for="reason">Reason for Visit</label>
+                    <input type="text" id="reason" name="reason" placeholder="Visit reason" required>
+                </div>
 
-<div class="developed">Developed by 𝚅𝚒𝚜𝚑𝚊𝚕</div>
+                <div class="form-group">
+                    <label for="address">Address (Optional)</label>
+                    <input type="text" id="address" name="address" placeholder="Patient's address">
+                </div>
 
+                <div class="form-group">
+                    <label for="fees">Consultation Fees (₹)</label>
+                    <input type="number" id="fees" name="fees" placeholder="Fees amount" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment_mode">Payment Mode</label>
+                    <select id="payment_mode" name="payment_mode" onchange="togglePayment()" required>
+                        <option value="">Select method</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Online">Online</option>
+                    </select>
+                    <span class="payment-indicator"></span>
+                </div>
+
+                <div class="qr-box" id="qr_box">
+                    <p>Scan to pay via UPI</p>
+                    <img src="{{ url_for('static', filename='qr.png') }}" alt="UPI QR Code" class="qr-img">
+                    <p class="upi-id">9552121633@axl / 9552121633@ybl</p>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Register Patient
+                </button>
+            </form>
+        </div>
+
+        <div class="view-records">
+            <a href="/records">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                View All Records
+            </a>
+        </div>
+
+        <div class="watermark">
+            © 2023 Tapasya Hospital
+        </div>
+    </div>
+
+    <script>
+        // Simple payment toggle function
+        function togglePayment() {
+            const paymentMode = document.getElementById("payment_mode").value;
+            const qrBox = document.getElementById("qr_box");
+            
+            if (paymentMode === "Online") {
+                qrBox.style.display = "block";
+            } else {
+                qrBox.style.display = "none";
+            }
+        }
+
+        // Add focus styles programmatically for better compatibility
+        document.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('focus', function() {
+                this.parentNode.querySelector('.payment-indicator')?.style.setProperty('background', 'var(--primary)');
+            });
+            
+            el.addEventListener('blur', function() {
+                this.parentNode.querySelector('.payment-indicator')?.style.setProperty('background', '#e5e7eb');
+            });
+        });
+    </script>
 </body>
 </html>

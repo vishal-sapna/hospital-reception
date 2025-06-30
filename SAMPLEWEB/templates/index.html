@@ -2,168 +2,541 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hospital Reception - Patient Entry</title>
+    <title>Tapasya Hospital - Premium Patient Portal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1b263b;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to right, #e0eafc, #cfdef3);
-            color: #333;
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            color: var(--dark);
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .floating-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-bg span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            animation: float 15s linear infinite;
+            bottom: -150px;
+        }
+
+        .floating-bg span:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+            animation-duration: 12s;
+        }
+
+        .floating-bg span:nth-child(2) {
+            left: 10%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 2s;
+            animation-duration: 18s;
+        }
+
+        .floating-bg span:nth-child(3) {
+            left: 70%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 4s;
+        }
+
+        .floating-bg span:nth-child(4) {
+            left: 40%;
+            width: 120px;
+            height: 120px;
+            animation-delay: 0s;
+            animation-duration: 20s;
+        }
+
+        .floating-bg span:nth-child(5) {
+            left: 65%;
+            width: 40px;
+            height: 40px;
+            animation-delay: 0s;
         }
 
         header {
-            background-color: #34495e;
-            color: #fff;
-            padding: 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
             text-align: center;
-            font-size: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header-icon {
+            font-size: 2rem;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
             font-weight: 600;
         }
 
         .container {
-            max-width: 600px;
-            background: #fff;
-            margin: 40px auto;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.3s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
         }
 
         h2 {
-            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
             text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
         }
 
         label {
             display: block;
-            margin-top: 15px;
-            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            color: var(--primary);
+            font-size: 1.1rem;
         }
 
         input, select {
             width: 100%;
-            padding: 12px;
-            margin-top: 6px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            font-size: 16px;
+            padding: 1rem 1rem 1rem 2.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background-color: white;
         }
 
         input[name="name"] {
-            border: 2px solid #3498db;
             font-weight: 600;
-            color: #2c3e50;
+            letter-spacing: 0.5px;
         }
 
-        button {
-            margin-top: 20px;
+        .btn-submit {
             width: 100%;
-            padding: 14px;
-            background-color: #3498db;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
-            font-size: 16px;
-            font-weight: 600;
             border: none;
             border-radius: 12px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #2b82c9;
-        }
-
-        .link {
-            text-align: center;
-            margin-top: 25px;
-        }
-
-        .link a {
-            color: #2c3e50;
+            font-size: 1.1rem;
             font-weight: 600;
-            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
         }
 
         .qr-box {
             display: none;
-            margin-top: 20px;
+            margin-top: 1.5rem;
             text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px dashed #dee2e6;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .qr-box img {
-            max-width: 180px;
-            margin-top: 10px;
+        .qr-box.active {
+            display: block;
+        }
+
+        .qr-img {
+            max-width: 200px;
+            margin: 1rem auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .qr-img:hover {
+            transform: scale(1.05);
+        }
+
+        .upi-id {
+            margin-top: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .upi-id i {
+            font-size: 1.2rem;
+        }
+
+        .view-records {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .view-records a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .view-records a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
         }
 
         .watermark {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: #adb5bd;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .real-time {
             position: fixed;
-            bottom: 10px;
+            bottom: 20px;
             right: 20px;
-            font-size: 14px;
-            color: #aaa;
-            transform: rotate(-15deg);
-            opacity: 0.6;
-            font-weight: bold;
+            background: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--dark);
+            z-index: 5;
+            animation: fadeIn 1s 1s both;
+        }
+
+        .real-time i {
+            color: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 50%;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 30%;
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.4rem;
+            }
+
+            .header-icon {
+                font-size: 1.6rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            input, select {
+                padding: 0.8rem 0.8rem 0.8rem 2.5rem;
+            }
+
+            .input-icon {
+                top: 35px;
+                font-size: 1rem;
+            }
         }
     </style>
-    <script>
-        function togglePayment() {
-            const mode = document.getElementById("payment_mode").value;
-            const qrBox = document.getElementById("qr_box");
-            qrBox.style.display = (mode === "Online") ? "block" : "none";
-        }
-    </script>
 </head>
 <body>
+    <div class="floating-bg">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
-<header>🏥 Tapasya Hospital Reception Portal</header>
+    <header>
+        <div class="header-content">
+            <i class="fas fa-hospital-alt header-icon"></i>
+            <h1 class="header-title">Tapasya Hospital Portal</h1>
+        </div>
+    </header>
 
-<div class="container">
-    <h2>New Patient Entry Form</h2>
-    <form method="POST" action="/submit">
-        <label>Patient Name:</label>
-        <input type="text" name="name" required>
+    <div class="container">
+        <div class="form-card animate__animated">
+            <h2>New Patient Registration</h2>
+            
+            <form method="POST" action="/submit">
+                <div class="form-group">
+                    <label for="name">Patient Full Name</label>
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="name" name="name" placeholder="Enter patient's full name" required>
+                </div>
 
-        <label>Age:</label>
-        <input type="number" name="age" required>
+                <div class="form-group">
+                    <label for="age">Patient Age</label>
+                    <i class="fas fa-calendar-alt input-icon"></i>
+                    <input type="number" id="age" name="age" placeholder="Enter age" required>
+                </div>
 
-        <label>Mobile Number:</label>
-        <input type="text" name="mobile" required>
+                <div class="form-group">
+                    <label for="mobile">Mobile Number</label>
+                    <i class="fas fa-mobile-alt input-icon"></i>
+                    <input type="text" id="mobile" name="mobile" placeholder="Enter mobile number" required>
+                </div>
 
-        <label>Reason for Visit:</label>
-        <input type="text" name="reason" required>
+                <div class="form-group">
+                    <label for="reason">Reason for Visit</label>
+                    <i class="fas fa-stethoscope input-icon"></i>
+                    <input type="text" id="reason" name="reason" placeholder="Enter reason for visit" required>
+                </div>
 
-        <label>Address (optional):</label>
-        <input type="text" name="address">
+                <div class="form-group">
+                    <label for="address">Address (Optional)</label>
+                    <i class="fas fa-map-marker-alt input-icon"></i>
+                    <input type="text" id="address" name="address" placeholder="Enter patient's address">
+                </div>
 
-        <label>Fees Paid (₹):</label>
-        <input type="number" name="fees" required>
+                <div class="form-group">
+                    <label for="fees">Consultation Fees (₹)</label>
+                    <i class="fas fa-rupee-sign input-icon"></i>
+                    <input type="number" id="fees" name="fees" placeholder="Enter fees amount" required>
+                </div>
 
-        <label>Payment Mode:</label>
-        <select name="payment_mode" id="payment_mode" onchange="togglePayment()" required>
-            <option value="">--Select--</option>
-            <option value="Cash">Cash</option>
-            <option value="Online">Online</option>
-        </select>
+                <div class="form-group">
+                    <label for="payment_mode">Payment Mode</label>
+                    <i class="fas fa-wallet input-icon"></i>
+                    <select id="payment_mode" name="payment_mode" onchange="togglePayment()" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="Cash">Cash Payment</option>
+                        <option value="Online">Online Payment</option>
+                    </select>
+                </div>
 
-        <div class="qr-box" id="qr_box">
-            <p><strong>Scan to Pay (UPI):</strong></p>
-            <img src="{{ url_for('static', filename='qr.png') }}" alt="UPI QR Code">
-            <p><strong>UPI ID:</strong> 9552121633@axl / 9552121633@ybl</p>
+                <div class="qr-box" id="qr_box">
+                    <p><strong>Scan this QR code to pay via UPI</strong></p>
+                    <img src="{{ url_for('static', filename='qr.png') }}" alt="UPI QR Code" class="qr-img">
+                    <div class="upi-id">
+                        <i class="fas fa-qrcode"></i>
+                        <span>9552121633@axl / 9552121633@ybl</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i>
+                    Register Patient
+                </button>
+            </form>
         </div>
 
-        <button type="submit">Submit Entry ✅</button>
-    </form>
+        <div class="view-records">
+            <a href="/records">
+                <i class="fas fa-list"></i>
+                View All Patient Records
+            </a>
+        </div>
 
-    <div class="link">
-        <a href="/records">📋 View All Records</a>
+        <div class="watermark">
+            © 2023 Tapasya Hospital. All rights reserved.
+        </div>
     </div>
-</div>
 
-<div class="watermark">© Tapasya Hospital 2025</div>
+    <div class="real-time">
+        <i class="fas fa-circle"></i>
+        <span>Live System - Real-time Updates</span>
+    </div>
 
+    <script>
+        // Toggle QR code visibility based on payment selection
+        function togglePayment() {
+            const paymentMode = document.getElementById("payment_mode").value;
+            const qrBox = document.getElementById("qr_box");
+            
+            if (paymentMode === "Online") {
+                qrBox.classList.add("active");
+                // Add animation class
+                qrBox.classList.add("animate__animated", "animate__fadeIn");
+            } else {
+                qrBox.classList.remove("active");
+                qrBox.classList.remove("animate__animated", "animate__fadeIn");
+            }
+        }
+
+        // Real-time clock
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const dateStr = now.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+            
+            const realTimeElement = document.querySelector('.real-time');
+            if (realTimeElement) {
+                realTimeElement.innerHTML = `
+                    <i class="fas fa-circle"></i>
+                    <span>${timeStr} • ${dateStr}</span>
+                `;
+            }
+        }
+
+        // Update clock every second
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call
+
+        // Add animation to form elements on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach((input, index) => {
+                input.style.animationDelay = `${0.1 * index}s`;
+                input.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+        });
+    </script>
 </body>
 </html>

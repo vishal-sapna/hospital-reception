@@ -4,91 +4,212 @@
     <meta charset="UTF-8">
     <title>Old Patient Records</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1b263b;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gray: #adb5bd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
         body {
-            font-family: 'Inter', sans-serif;
-            padding: 30px;
-            background: linear-gradient(to right, #f4f8fc, #e8f1f8);
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
         }
-        h2 {
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
             text-align: center;
-            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        h3 {
-            margin-top: 50px;
-            color: #2c3e50;
+        
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .archive-section {
+            margin-bottom: 3rem;
+        }
+        
+        .archive-title {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            background-color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 40px;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            margin-top: 1rem;
         }
+        
         th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
+            padding: 1rem;
             text-align: left;
+            border-bottom: 1px solid #e9ecef;
         }
+        
         th {
-            background: #3498db;
+            background-color: var(--primary);
             color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
         }
+        
         tr:hover {
-            background-color: #f9f9f9;
+            background-color: #f8f9fa;
         }
-        .back {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .back a {
-            font-weight: 600;
-            color: #2c3e50;
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--primary);
+            color: white;
             text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
-        .watermark {
-            position: fixed;
-            bottom: 10px;
-            right: 20px;
-            font-size: 14px;
-            color: #aaa;
-            transform: rotate(-15deg);
-            opacity: 0.6;
-            font-weight: bold;
+        
+        .back-btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #e9ecef;
         }
     </style>
 </head>
 <body>
-
-<h2>📂 Archived Patient Records (Daily)</h2>
-
-{% for filename, rows in records.items() %}
-    <h3>📅 {{ filename.replace('.csv','') }}</h3>
-    <table>
-        <tr>
-            <th>Name</th><th>Age</th><th>Mobile</th><th>Reason</th>
-            <th>Address</th><th>Fees</th><th>Payment</th><th>Time</th>
-        </tr>
-        {% for row in rows %}
-        <tr>
-            <td>{{ row.name }}</td>
-            <td>{{ row.age }}</td>
-            <td>{{ row.mobile }}</td>
-            <td>{{ row.reason }}</td>
-            <td>{{ row.address }}</td>
-            <td>{{ row.fees }}</td>
-            <td>{{ row.payment_mode }}</td>
-            <td>{{ row.date }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-{% endfor %}
-
-<div class="back"><a href="/">🔙 Back to Home</a></div>
-<div class="watermark">© Tapasya Hospital 2025</div>
-
+    <header>
+        <div class="header-title">
+            <i class="fas fa-archive"></i>
+            <span>Archived Patient Records</span>
+        </div>
+    </header>
+    
+    <div class="container">
+        {% if records %}
+            {% for filename, rows in records.items() %}
+            <div class="archive-section">
+                <div class="archive-title">
+                    <i class="far fa-calendar-alt"></i>
+                    {{ filename.replace('.csv','') }}
+                </div>
+                
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Mobile</th>
+                                <th>Reason</th>
+                                <th>Fees</th>
+                                <th>Payment</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in rows %}
+                            <tr>
+                                <td>{{ row.name }}</td>
+                                <td>{{ row.age }}</td>
+                                <td>{{ row.mobile }}</td>
+                                <td>{{ row.reason }}</td>
+                                <td>₹{{ row.fees }}</td>
+                                <td>{{ row.payment_mode }}</td>
+                                <td>{{ row.date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <h3>No Archived Records Found</h3>
+                <p>Patient records are archived daily</p>
+            </div>
+        {% endif %}
+        
+        <div style="text-align: center;">
+            <a href="/" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 Hospital Management System. All rights reserved.</p>
+    </div>
 </body>
 </html>
