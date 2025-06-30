@@ -2,330 +2,371 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tapasya Hospital - Patient Entry</title>
+    <title>Tapasya Hospital</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-light: #3b82f6;
-            --secondary: #1e40af;
-            --text: #1f2937;
-            --light: #f9fafb;
-            --border: #e5e7eb;
+            --primary: #00695c;
+            --primary-light: #00897b;
+            --secondary: #004d40;
+            --accent: #ffab40;
+            --text: #e0f2f1;
+            --text-dark: #263238;
         }
-
-        * {
+        
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f4f8;
-            color: var(--text);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-title {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(-45deg, #004d40, #00897b, #26a69a, #80cbc4);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .container {
-            max-width: 100%;
-            padding: 1rem;
-        }
-
-        .form-card {
-            background: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            text-align: center;
+            height: 100vh;
+            overflow: hidden;
+            color: var(--text);
             position: relative;
         }
-
-        .form-title::after {
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .top-bar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 15px 25px;
+            background: rgba(0, 77, 64, 0.8);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            margin-top: 80px;
+            animation: zoomIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 5;
+            position: relative;
+        }
+        
+        .logo img {
+            max-width: 200px;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+        
+        .welcome {
+            margin-top: 30px;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            animation: fadeInUp 1.5s ease-out;
+            text-align: center;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .welcome span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-top: 10px;
+            background: linear-gradient(90deg, #fff, #ffab40);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            from { text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+            to { text-shadow: 0 0 15px rgba(255, 255, 255, 0.7); }
+        }
+        
+        .developed {
+            position: absolute;
+            bottom: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Poppins', sans-serif;
+            z-index: 5;
+            animation: fadeIn 2s ease-in;
+        }
+        
+        .start-btn {
+            margin-top: 40px;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            background: linear-gradient(45deg, var(--primary-light), var(--accent));
+            color: var(--text-dark);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(0, 137, 123, 0.4);
+            z-index: 5;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+        
+        .start-btn::before {
             content: '';
             position: absolute;
-            bottom: -0.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3rem;
-            height: 0.25rem;
-            background: var(--primary-light);
-            border-radius: 0.25rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-            position: relative;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        input, select {
+            top: 0;
+            left: -100%;
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            font-size: 0.9375rem;
-            background-color: var(--light);
-            transition: border-color 0.2s;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        
+        .start-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 137, 123, 0.6);
         }
-
-        input[name="name"] {
-            font-weight: 500;
+        
+        .start-btn:hover::before {
+            left: 100%;
         }
-
-        .btn-submit {
-            width: 100%;
-            padding: 0.875rem;
-            background: linear-gradient(to right, var(--primary), var(--primary-light));
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
-
-        .btn-submit:active {
-            transform: translateY(1px);
-        }
-
-        .qr-box {
-            display: none;
-            margin-top: 1.5rem;
-            text-align: center;
-            padding: 1rem;
-            background-color: var(--light);
-            border-radius: 0.5rem;
-            border: 1px dashed var(--border);
-        }
-
-        .qr-img {
-            max-width: 150px;
-            margin: 0.75rem auto;
-            border-radius: 0.5rem;
-        }
-
-        .upi-id {
-            font-size: 0.8125rem;
-            color: var(--text);
-            margin-top: 0.5rem;
-        }
-
-        .view-records {
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .view-records a {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9375rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .watermark {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-
-        /* Payment mode indicator */
-        .payment-indicator {
+        
+        .floating-icons {
             position: absolute;
-            right: 0.75rem;
-            top: 2.25rem;
-            width: 0.75rem;
-            height: 0.75rem;
-            border-radius: 50%;
-            background: #e5e7eb;
-            transition: background 0.2s;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
         }
-
-        select:focus + .payment-indicator {
-            background: var(--primary);
+        
+        .floating-icons i {
+            position: absolute;
+            display: block;
+            color: rgba(255, 255, 255, 0.2);
+            animation: float linear infinite;
         }
-
-        /* Responsive adjustments */
-        @media (min-width: 768px) {
-            .container {
-                max-width: 28rem;
-                margin: 1rem auto;
-                padding: 1.5rem;
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
             }
-            
-            header {
-                padding: 1rem 2rem;
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
             }
-            
-            .header-title {
-                font-size: 1.5rem;
-            }
+        }
+        
+        @keyframes zoomIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .hospital-info {
+            position: absolute;
+            bottom: 60px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            width: 100%;
+            z-index: 5;
+            animation: fadeIn 2s ease-in;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                <line x1="6" y1="1" x2="6" y2="4"></line>
-                <line x1="10" y1="1" x2="10" y2="4"></line>
-                <line x1="14" y1="1" x2="14" y2="4"></line>
-            </svg>
-            <span>Tapasya Hospital</span>
-        </div>
-    </header>
+    <!-- Animated Background Elements -->
+    <div class="particles" id="particles-js"></div>
+    <div class="floating-icons" id="floating-icons"></div>
 
-    <div class="container">
-        <div class="form-card">
-            <h2 class="form-title">Patient Registration</h2>
-            
-            <form method="POST" action="/submit">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Patient's name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="age">Age</label>
-                    <input type="number" id="age" name="age" placeholder="Age" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="mobile">Mobile</label>
-                    <input type="tel" id="mobile" name="mobile" placeholder="Mobile number" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="reason">Reason for Visit</label>
-                    <input type="text" id="reason" name="reason" placeholder="Visit reason" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="address">Address (Optional)</label>
-                    <input type="text" id="address" name="address" placeholder="Patient's address">
-                </div>
-
-                <div class="form-group">
-                    <label for="fees">Consultation Fees (₹)</label>
-                    <input type="number" id="fees" name="fees" placeholder="Fees amount" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="payment_mode">Payment Mode</label>
-                    <select id="payment_mode" name="payment_mode" onchange="togglePayment()" required>
-                        <option value="">Select method</option>
-                        <option value="Cash">Cash</option>
-                        <option value="Online">Online</option>
-                    </select>
-                    <span class="payment-indicator"></span>
-                </div>
-
-                <div class="qr-box" id="qr_box">
-                    <p>Scan to pay via UPI</p>
-                    <img src="{{ url_for('static', filename='qr.png') }}" alt="UPI QR Code" class="qr-img">
-                    <p class="upi-id">9552121633@axl / 9552121633@ybl</p>
-                </div>
-
-                <button type="submit" class="btn-submit">
-                    Register Patient
-                </button>
-            </form>
-        </div>
-
-        <div class="view-records">
-            <a href="/records">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="8" y1="6" x2="21" y2="6"></line>
-                    <line x1="8" y1="12" x2="21" y2="12"></line>
-                    <line x1="8" y1="18" x2="21" y2="18"></line>
-                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
-                View All Records
-            </a>
-        </div>
-
-        <div class="watermark">
-            © 2023 Tapasya Hospital
-        </div>
+    <div class="top-bar">
+        <div><i class="fas fa-user-md"></i> DR. Sujit Sir</div>
+        <div><i class="fas fa-code"></i> Powered by Kautuk Sir</div>
     </div>
 
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Hospital Logo">
+    </div>
+
+    <div class="welcome">
+        WELCOME TO<br>
+        <span>Tapasya Hospital Reception Portal</span>
+    </div>
+
+    <a href="/start"><button class="start-btn"><i class="fas fa-sign-in-alt"></i> Enter Portal</button></a>
+
+    <div class="hospital-info">
+        <i class="fas fa-map-marker-alt"></i> Maharashtra | 24/7 Emergency Services
+    </div>
+
+    <div class="developed">
+        <i class="fas fa-laptop-code"></i> Developed by 𝚅𝚒𝚜𝚑𝚊𝚕
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Simple payment toggle function
-        function togglePayment() {
-            const paymentMode = document.getElementById("payment_mode").value;
-            const qrBox = document.getElementById("qr_box");
-            
-            if (paymentMode === "Online") {
-                qrBox.style.display = "block";
-            } else {
-                qrBox.style.display = "none";
-            }
+        // Floating icons animation
+        const floatingIcons = document.getElementById('floating-icons');
+        const icons = ['fa-heartbeat', 'fa-hospital', 'fa-stethoscope', 'fa-pills', 'fa-syringe', 'fa-ambulance'];
+        
+        for (let i = 0; i < 30; i++) {
+            const icon = document.createElement('i');
+            icon.className = `fas ${icons[Math.floor(Math.random() * icons.length)]}`;
+            icon.style.left = Math.random() * window.innerWidth + 'px';
+            icon.style.top = Math.random() * window.innerHeight + 'px';
+            icon.style.fontSize = Math.random() * 20 + 10 + 'px';
+            icon.style.animationDuration = Math.random() * 15 + 10 + 's';
+            icon.style.animationDelay = Math.random() * 5 + 's';
+            floatingIcons.appendChild(icon);
         }
 
-        // Add focus styles programmatically for better compatibility
-        document.querySelectorAll('input, select').forEach(el => {
-            el.addEventListener('focus', function() {
-                this.parentNode.querySelector('.payment-indicator')?.style.setProperty('background', 'var(--primary)');
-            });
+        // Particles.js configuration
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": true,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 0.5
+                        }
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        // Add ripple effect to button
+        const button = document.querySelector('.start-btn');
+        button.addEventListener('click', function(e) {
+            let x = e.clientX - e.target.getBoundingClientRect().left;
+            let y = e.clientY - e.target.getBoundingClientRect().top;
             
-            el.addEventListener('blur', function() {
-                this.parentNode.querySelector('.payment-indicator')?.style.setProperty('background', '#e5e7eb');
-            });
+            let ripples = document.createElement('span');
+            ripples.style.left = x + 'px';
+            ripples.style.top = y + 'px';
+            this.appendChild(ripples);
+            
+            setTimeout(() => {
+                ripples.remove();
+            }, 1000);
         });
     </script>
 </body>

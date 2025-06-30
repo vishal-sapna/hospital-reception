@@ -4,212 +4,267 @@
     <meta charset="UTF-8">
     <title>Old Patient Records</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --dark: #1b263b;
-            --light: #f8f9fa;
-            --success: #4cc9f0;
-            --warning: #f72585;
-            --gray: #adb5bd;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --accent: #27ae60;
+            --light-bg: #f8fafc;
+            --text: #2d3748;
+            --text-light: #718096;
         }
         
         body {
-            background-color: #f5f7fb;
-            color: var(--dark);
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--text);
+            padding: 40px 20px;
+            min-height: 100vh;
         }
         
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .container {
+        .main-container {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 0 auto;
         }
         
-        .archive-section {
-            margin-bottom: 3rem;
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
         }
         
-        .archive-title {
-            font-size: 1.2rem;
-            color: var(--dark);
-            margin-bottom: 1rem;
+        .header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 16px 32px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .clock {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(52, 152, 219, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--secondary);
+        }
+        
+        .record-section {
+            margin-bottom: 60px;
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: 500;
-            background-color: white;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-        
-        .card {
+            padding: 12px 20px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 10px;
+            z-index: 10;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        
+        table::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
         }
         
         th, td {
-            padding: 1rem;
+            padding: 16px 20px;
             text-align: left;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid #eee;
         }
         
         th {
             background-color: var(--primary);
             color: white;
-            font-weight: 500;
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 14px;
             letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
         
         tr:hover {
-            background-color: #f8f9fa;
+            background-color: #f1f5f9;
         }
         
-        .back-btn {
+        .back {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .back a {
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 50px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            margin-top: 1.5rem;
-            padding: 0.6rem 1.2rem;
-            background-color: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
         }
         
-        .back-btn:hover {
-            background-color: var(--secondary);
+        .back a:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
         }
         
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 1.5rem;
-            color: var(--gray);
-            font-size: 0.9rem;
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #aaa;
+            transform: rotate(-15deg);
+            opacity: 0.6;
+            font-weight: bold;
+            font-family: 'Inter', sans-serif;
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--gray);
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #e9ecef;
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            .header h2 {
+                font-size: 24px;
+                padding: 12px 20px;
+            }
+            
+            .clock {
+                position: static;
+                display: block;
+                margin: 15px auto;
+                width: fit-content;
+                transform: none;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                padding: 12px 15px;
+            }
         }
     </style>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const options = { 
+                timeZone: 'Asia/Kolkata',
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            };
+            const dateTimeStr = now.toLocaleString('en-IN', options);
+            document.getElementById('clock').textContent = dateTimeStr + ' | Maharashtra';
+        }
+
+        // Update clock every second
+        setInterval(updateClock, 1000);
+        window.onload = updateClock;
+    </script>
 </head>
 <body>
-    <header>
-        <div class="header-title">
-            <i class="fas fa-archive"></i>
-            <span>Archived Patient Records</span>
-        </div>
-    </header>
-    
-    <div class="container">
-        {% if records %}
-            {% for filename, rows in records.items() %}
-            <div class="archive-section">
-                <div class="archive-title">
-                    <i class="far fa-calendar-alt"></i>
-                    {{ filename.replace('.csv','') }}
-                </div>
-                
-                <div class="card">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Age</th>
-                                <th>Mobile</th>
-                                <th>Reason</th>
-                                <th>Fees</th>
-                                <th>Payment</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for row in rows %}
-                            <tr>
-                                <td>{{ row.name }}</td>
-                                <td>{{ row.age }}</td>
-                                <td>{{ row.mobile }}</td>
-                                <td>{{ row.reason }}</td>
-                                <td>₹{{ row.fees }}</td>
-                                <td>{{ row.payment_mode }}</td>
-                                <td>{{ row.date }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="empty-state">
-                <i class="fas fa-box-open"></i>
-                <h3>No Archived Records Found</h3>
-                <p>Patient records are archived daily</p>
-            </div>
-        {% endif %}
-        
-        <div style="text-align: center;">
-            <a href="/" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
-                Back to Home
-            </a>
-        </div>
+
+<div class="main-container">
+    <div class="header">
+        <h2><i class="fas fa-archive"></i> Archived Patient Records (Daily)</h2>
+        <div class="clock" id="clock"></div>
     </div>
-    
-    <div class="footer">
-        <p>© 2023 Hospital Management System. All rights reserved.</p>
+
+    {% for filename, rows in records.items() %}
+    <div class="record-section">
+        <h3><i class="fas fa-calendar-day"></i> {{ filename.replace('.csv','') }}</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Mobile</th>
+                    <th>Reason</th>
+                    <th>Address</th>
+                    <th>Fees (₹)</th>
+                    <th>Payment</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.age }}</td>
+                    <td>{{ row.mobile }}</td>
+                    <td>{{ row.reason }}</td>
+                    <td>{{ row.address }}</td>
+                    <td>{{ row.fees }}</td>
+                    <td>{{ row.payment_mode }}</td>
+                    <td>{{ row.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    {% endfor %}
+
+    <div class="back">
+        <a href="/"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+</div>
+
+<div class="watermark">© Tapasya Hospital 2025</div>
+
 </body>
 </html>

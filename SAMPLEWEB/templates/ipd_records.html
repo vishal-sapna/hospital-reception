@@ -4,279 +4,264 @@
     <meta charset="UTF-8">
     <title>IPD Patient Records</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #7209b7;
-            --secondary: #560bad;
-            --accent: #b5179e;
-            --dark: #1b263b;
-            --light: #f8f9fa;
-            --success: #4cc9f0;
-            --warning: #f72585;
-            --gray: #adb5bd;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+        :root {
+            --primary: #8d6e63;
+            --primary-dark: #6d4c41;
+            --secondary: #5d4037;
+            --accent: #d32f2f;
+            --light-bg: #f5f5f5;
+            --text: #3e2723;
+            --text-light: #8d6e63;
         }
         
         body {
-            background-color: #f9f0ff;
-            color: var(--dark);
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fdfcfb 0%, #f3e9e2 100%);
+            color: var(--text);
+            padding-bottom: 60px;
+            min-height: 100vh;
         }
         
         header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(to right, var(--primary-dark), var(--secondary));
             color: white;
-            padding: 1.5rem;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 28px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
-        .header-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        .clock {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
         }
         
         .container {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 40px auto;
+            background-color: white;
+            padding: 0;
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.3);
         }
         
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            margin-bottom: 2rem;
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
         }
         
-        .card-title {
-            font-size: 1.4rem;
-            color: var(--dark);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--secondary);
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background-color: var(--accent);
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #c9184a;
-            transform: translateY(-2px);
+        .title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            padding: 25px;
+            color: var(--secondary);
+            border-bottom: 1px solid #eee;
+            background-color: var(--light-bg);
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
+            margin: 0;
         }
         
         th, td {
-            padding: 1rem;
+            padding: 16px 20px;
             text-align: left;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid #eee;
         }
         
         th {
             background-color: var(--primary);
             color: white;
-            font-weight: 500;
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 14px;
             letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
         
         tr:hover {
-            background-color: #f8f9fa;
+            background-color: #f1f5f9;
         }
         
-        .badge {
-            display: inline-block;
-            padding: 0.35rem 0.65rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            line-height: 1;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            border-radius: 50rem;
-        }
-        
-        .badge-success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        
-        .badge-warning {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-        
-        .action-icons {
+        .action-links {
             display: flex;
-            gap: 12px;
+            justify-content: center;
+            gap: 20px;
+            padding: 25px;
+            background-color: var(--light-bg);
+            border-top: 1px solid #eee;
         }
         
-        .action-icons a {
-            color: var(--gray);
+        .action-links a {
+            text-decoration: none;
+            font-weight: 600;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
             transition: all 0.3s ease;
-            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
-        .action-icons a:hover {
-            transform: scale(1.2);
+        .add-btn {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
         }
         
-        .edit-icon:hover {
-            color: var(--accent);
+        .home-btn {
+            background: linear-gradient(to right, #5d4037, #3e2723);
         }
         
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 1.5rem;
-            color: var(--gray);
-            font-size: 0.9rem;
+        .action-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--gray);
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #aaa;
+            transform: rotate(-15deg);
+            opacity: 0.6;
+            font-weight: bold;
+            font-family: 'Inter', sans-serif;
         }
         
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #e9ecef;
+        @media (max-width: 768px) {
+            header {
+                font-size: 22px;
+                padding: 20px 15px;
+            }
+            
+            .clock {
+                position: static;
+                display: inline-block;
+                margin-top: 10px;
+                transform: none;
+            }
+            
+            .container {
+                margin: 20px;
+                border-radius: 12px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .action-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .action-links a {
+                justify-content: center;
+            }
         }
     </style>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const options = { 
+                timeZone: 'Asia/Kolkata',
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            };
+            const dateTimeStr = now.toLocaleString('en-IN', options);
+            document.getElementById('clock').textContent = dateTimeStr + ' | Maharashtra';
+        }
+
+        // Update clock every second
+        setInterval(updateClock, 1000);
+        window.onload = updateClock;
+    </script>
 </head>
 <body>
-    <header>
-        <div class="header-title">
-            <i class="fas fa-procedures"></i>
-            <span>IPD Patient Records</span>
-        </div>
-    </header>
-    
-    <div class="container">
-        <div class="card">
-            <h2 class="card-title">
-                <i class="fas fa-bed"></i>
-                In-Patient Details
-            </h2>
-            
-            <div class="action-buttons">
-                <a href="/ipd" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    Add New IPD
-                </a>
-                <a href="/" class="btn btn-secondary">
-                    <i class="fas fa-home"></i>
-                    Home
-                </a>
-            </div>
-            
-            {% if ipd_data %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Age</th>
-                        <th>Mobile</th>
-                        <th>Reason</th>
-                        <th>Total Bill</th>
-                        <th>Payment</th>
-                        <th>Time</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for entry in ipd_data %}
-                    <tr>
-                        <td>{{ entry.name }}</td>
-                        <td>{{ entry.age }}</td>
-                        <td>{{ entry.mobile }}</td>
-                        <td>{{ entry.reason }}</td>
-                        <td>₹{{ entry.total_bill }}</td>
-                        <td>
-                            <span class="badge {% if entry.payment_mode == 'Cash' %}badge-success{% else %}badge-warning{% endif %}">
-                                {{ entry.payment_mode }}
-                            </span>
-                        </td>
-                        <td>{{ entry.date }}</td>
-                        <td>
-                            <div class="action-icons">
-                                <a href="/ipd-edit/{{ loop.index0 }}" class="edit-icon" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-procedures"></i>
-                <h3>No IPD Patients Found</h3>
-                <p>Add new in-patients to see them listed here</p>
-            </div>
-            {% endif %}
-        </div>
+
+<header>
+    <i class="fas fa-procedures"></i> IPD Patient Records
+    <div class="clock" id="clock"></div>
+</header>
+
+<div class="container">
+    <div class="title">Current In-Patients</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Mobile</th>
+                <th>Reason</th>
+                <th>Address</th>
+                <th>Total Bill (₹)</th>
+                <th>Payment</th>
+                <th>Admission Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in ipd_data %}
+            <tr>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.age }}</td>
+                <td>{{ entry.mobile }}</td>
+                <td>{{ entry.reason }}</td>
+                <td>{{ entry.address }}</td>
+                <td>{{ entry.total_bill }}</td>
+                <td>{{ entry.payment_mode }}</td>
+                <td>{{ entry.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="action-links">
+        <a href="/ipd" class="add-btn"><i class="fas fa-plus"></i> Add IPD Patient</a>
+        <a href="/" class="home-btn"><i class="fas fa-home"></i> Back to Home</a>
     </div>
-    
-    <div class="footer">
-        <p>© 2023 Hospital Management System. All rights reserved.</p>
-    </div>
+</div>
+
+<div class="watermark">© Tapasya Hospital 2025</div>
+
 </body>
 </html>
