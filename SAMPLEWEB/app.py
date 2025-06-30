@@ -41,7 +41,18 @@ def home():
 
 @app.route('/start')
 def start():
-    return render_template('index.html')
+    # Calculate statistics
+    opd_count = len(data)
+    ipd_count = len(ipd_data)
+    
+    # Calculate total income (convert fees/total_bill to float)
+    total_income = sum(float(entry['fees']) for entry in data) + \
+                   sum(float(entry['total_bill']) for entry in ipd_data)
+    
+    return render_template('index.html', 
+                         opd_count=opd_count,
+                         ipd_count=ipd_count,
+                         total_income=total_income)
 
 @app.route('/submit', methods=['POST'])
 def submit():
