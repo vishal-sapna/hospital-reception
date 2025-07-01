@@ -9,9 +9,32 @@ from pydrive.drive import GoogleDrive
 from pydrive.files import GoogleDriveFile
 
 app = Flask(__name__)
-data = []              # OPD Patients
-ipd_data = []          # IPD Patients
+DATA_DIR = "data"
 ARCHIVE_DIR = "archives"
+OPD_FILE = os.path.join(DATA_DIR, "opd_data.csv")
+IPD_FILE = os.path.join(DATA_DIR, "ipd_data.csv")
+
+# Create data directory if it doesn't exist
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
+if not os.path.exists(ARCHIVE_DIR):
+    os.makedirs(ARCHIVE_DIR)
+
+# Initialize data lists by loading from CSV files
+data = []  # OPD Patients
+ipd_data = []  # IPD Patients
+
+# Load existing OPD data
+if os.path.exists(OPD_FILE):
+    with open(OPD_FILE, mode='r', newline='') as f:
+        reader = csv.DictReader(f)
+        data = list(reader)
+
+# Load existing IPD data
+if os.path.exists(IPD_FILE):
+    with open(IPD_FILE, mode='r', newline='') as f:
+        reader = csv.DictReader(f)
+        ipd_data = list(reader)
 
 # Environment-based credentials configuration
 credentials = {
@@ -32,19 +55,35 @@ gauth.settings["client_config_backend"] = "settings"
 gauth.settings["client_config"] = credentials
 drive = GoogleDrive(gauth)
 
-if not os.path.exists(ARCHIVE_DIR):
-    os.makedirs(ARCHIVE_DIR)
-
 def current_indian_time():
     return datetime.now(timezone("Asia/Kolkata")).strftime("%d-%m-%Y %H:%M")
 
+def save_opd_data():
+    """Save OPD data to CSV file"""
+    with open(OPD_FILE, mode='w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            "name", "age", "mobile", "reason", "address", "fees", "payment_mode", "date"
+        ])
+        writer.writeheader()
+        writer.writerows(data)
+
+def save_ipd_data():
+    """Save IPD data to CSV file"""
+    with open(IPD_FILE, mode='w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            "name", "age", "mobile", "reason", "address", "total_bill", "payment_mode", "date"
+        ])
+        writer.writeheader()
+        writer.writerows(ipd_data)
+
 def reset_daily_records():
+    """Archive today's records and create daily backup"""
     today = datetime.now(timezone("Asia/Kolkata")).strftime("%Y-%m-%d")
     archive_file = os.path.join(ARCHIVE_DIR, f"{today}.csv")
     flag_file = os.path.join(ARCHIVE_DIR, f"{today}.flag")
 
     if os.path.exists(flag_file):
-        return
+        return archive_file if os.path.exists(archive_file) else None
 
     if data:
         with open(archive_file, "w", newline='') as f:
@@ -55,6 +94,8 @@ def reset_daily_records():
             writer.writerows(data)
         with open(flag_file, "w") as f:
             f.write("archived")
+    
+    save_opd_data()  # Ensure main OPD data is saved
     return archive_file if os.path.exists(archive_file) else None
 
 def upload_to_drive(file_path):
@@ -67,7 +108,6 @@ def upload_to_drive(file_path):
             print("Google Drive credentials not configured. Skipping backup.")
             return False
 
-        # Authenticate with Google Drive
         if gauth.credentials is None:
             gauth.LocalWebserverAuth()
         elif gauth.access_token_expired:
@@ -75,7 +115,6 @@ def upload_to_drive(file_path):
         else:
             gauth.Authorize()
 
-        # Create or get backup folder
         folder_name = "Hospital_Backups"
         folder_query = f"title='{folder_name}' and mimeType='application/vnd.google-apps.folder' and trashed=false"
         folders = drive.ListFile({'q': folder_query}).GetList()
@@ -89,7 +128,6 @@ def upload_to_drive(file_path):
             })
             folder.Upload()
 
-        # Upload the file
         file_name = os.path.basename(file_path)
         gfile = drive.CreateFile({
             'title': file_name,
@@ -113,8 +151,8 @@ def home():
 def start():
     opd_count = len(data)
     ipd_count = len(ipd_data)
-    total_income = sum(float(entry['fees']) for entry in data) + \
-                   sum(float(entry['total_bill']) for entry in ipd_data)
+    total_income = sum(float(entry.get('fees', 0)) for entry in data) + \
+                   sum(float(entry.get('total_bill', 0)) for entry in ipd_data)
     
     return render_template('index.html', 
                          opd_count=opd_count,
@@ -134,6 +172,7 @@ def submit():
         'date': current_indian_time()
     }
     data.append(entry)
+    save_opd_data()  # Save to permanent storage
     
     archive_file = reset_daily_records()
     if archive_file:
@@ -160,6 +199,7 @@ def edit(index):
             'payment_mode': request.form['payment_mode'],
             'date': data[index]['date']
         }
+        save_opd_data()  # Save changes to permanent storage
         return redirect('/records')
     return render_template('edit.html', entry=data[index], index=index)
 
@@ -167,6 +207,7 @@ def edit(index):
 def delete(index):
     if 0 <= index < len(data):
         del data[index]
+        save_opd_data()  # Save changes to permanent storage
     return redirect('/records')
 
 @app.route('/export')
@@ -219,6 +260,7 @@ def ipd():
             'date': current_indian_time()
         }
         ipd_data.append(entry)
+        save_ipd_data()  # Save to permanent storage
         
         archive_file = reset_daily_records()
         if archive_file:
@@ -265,6 +307,7 @@ def ipd_edit(index):
             'payment_mode': request.form['payment_mode'],
             'date': ipd_data[index]['date']
         }
+        save_ipd_data()  # Save changes to permanent storage
         return redirect('/ipd-records')
     return render_template('ipd_edit.html', entry=ipd_data[index], index=index)
 
