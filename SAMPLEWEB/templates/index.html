@@ -108,6 +108,22 @@
             color: #2c3e50;
         }
 
+        /* Backup status indicator */
+        .backup-status {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .backup-status i {
+            font-size: 16px;
+        }
+
         h2 {
             margin-bottom: 20px;
             text-align: center;
@@ -249,6 +265,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         function togglePayment() {
             const mode = document.getElementById("payment_mode").value;
@@ -276,6 +293,18 @@
         // Update clock every second
         setInterval(updateClock, 1000);
         window.onload = updateClock;
+
+        // Simulate backup status (actual status would come from server)
+        function updateBackupStatus() {
+            const statusElement = document.getElementById('backup-status');
+            // This would be replaced with actual status from server
+            const lastBackup = new Date().toLocaleTimeString();
+            statusElement.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Last backup: ${lastBackup}`;
+        }
+        
+        // Check backup status every 30 seconds
+        setInterval(updateBackupStatus, 30000);
+        updateBackupStatus();
     </script>
 </head>
 <body>
@@ -300,6 +329,11 @@
             <div class="stat-label" style="color: #9b59b6;">Today's Total Fees</div>
             <div class="stat-value">₹{{ "%.2f"|format(total_income) }}</div>
         </div>
+    </div>
+
+    <!-- Backup Status Indicator -->
+    <div class="backup-status" id="backup-status">
+        <i class="fas fa-cloud-upload-alt"></i> Backup status: Loading...
     </div>
 
     <h2>New Patient Entry Form</h2>

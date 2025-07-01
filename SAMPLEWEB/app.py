@@ -4,11 +4,18 @@ from pytz import timezone
 import os
 import csv
 from io import StringIO
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+from pydrive.files import GoogleDriveFile
 
 app = Flask(__name__)
 data = []              # OPD Patients
 ipd_data = []          # IPD Patients
 ARCHIVE_DIR = "archives"
+
+# Initialize Google Drive authentication
+gauth = GoogleAuth()
+drive = GoogleDrive(gauth)
 
 if not os.path.exists(ARCHIVE_DIR):
     os.makedirs(ARCHIVE_DIR)
@@ -33,6 +40,63 @@ def reset_daily_records():
             writer.writerows(data)
         with open(flag_file, "w") as f:
             f.write("archived")
+    return archive_file if os.path.exists(archive_file) else None
+
+def upload_to_drive(file_path):
+    """Uploads a file to Google Drive in the 'Hospital_Backups' folder"""
+    try:
+        # Check if file exists
+        if not file_path or not os.path.exists(file_path):
+            return False
+        
+        # Check if credentials file exists
+        if not os.path.exists('credentials.json'):
+            print("Google Drive credentials not found. Skipping backup.")
+            return False
+
+        # Authenticate with Google Drive
+        gauth.LoadCredentialsFile("credentials.json")
+        if gauth.credentials is None:
+            # Authenticate if they're not there
+            gauth.LocalWebserverAuth()
+        elif gauth.access_token_expired:
+            # Refresh them if expired
+            gauth.Refresh()
+        else:
+            # Initialize the saved creds
+            gauth.Authorize()
+        
+        # Save the current credentials
+        gauth.SaveCredentialsFile("credentials.json")
+
+        # Create or get the backup folder
+        folder_name = "Hospital_Backups"
+        folder_query = f"title='{folder_name}' and mimeType='application/vnd.google-apps.folder' and trashed=false"
+        folders = drive.ListFile({'q': folder_query}).GetList()
+        
+        if folders:
+            folder = folders[0]
+        else:
+            folder = drive.CreateFile({
+                'title': folder_name,
+                'mimeType': 'application/vnd.google-apps.folder'
+            })
+            folder.Upload()
+
+        # Upload the file
+        file_name = os.path.basename(file_path)
+        gfile = drive.CreateFile({
+            'title': file_name,
+            'parents': [{'id': folder['id']}]
+        })
+        gfile.SetContentFile(file_path)
+        gfile.Upload()
+        
+        print(f"Successfully uploaded {file_name} to Google Drive")
+        return True
+    except Exception as e:
+        print(f"Error uploading to Google Drive: {str(e)}")
+        return False
 
 @app.route('/')
 def home():
@@ -67,6 +131,12 @@ def submit():
         'date': current_indian_time()
     }
     data.append(entry)
+    
+    # Save records and upload to Google Drive
+    archive_file = reset_daily_records()
+    if archive_file:
+        upload_to_drive(archive_file)
+    
     return redirect('/records')
 
 @app.route('/records')
@@ -147,6 +217,12 @@ def ipd():
             'date': current_indian_time()
         }
         ipd_data.append(entry)
+        
+        # Save records and upload to Google Drive
+        archive_file = reset_daily_records()
+        if archive_file:
+            upload_to_drive(archive_file)
+            
         return redirect('/ipd-records')
 
     prefill = {
