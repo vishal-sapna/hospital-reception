@@ -13,8 +13,23 @@ data = []              # OPD Patients
 ipd_data = []          # IPD Patients
 ARCHIVE_DIR = "archives"
 
+# Environment-based credentials configuration
+credentials = {
+    "installed": {
+        "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+        "project_id": os.getenv("GOOGLE_PROJECT_ID"),
+        "auth_uri": os.getenv("GOOGLE_AUTH_URI", "https://accounts.google.com/o/oauth2/auth"),
+        "token_uri": os.getenv("GOOGLE_TOKEN_URI", "https://oauth2.googleapis.com/token"),
+        "auth_provider_x509_cert_url": os.getenv("GOOGLE_CERT_URL", "https://www.googleapis.com/oauth2/v1/certs"),
+        "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+        "redirect_uris": [os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8080/")]
+    }
+}
+
 # Initialize Google Drive authentication
 gauth = GoogleAuth()
+gauth.settings["client_config_backend"] = "settings"
+gauth.settings["client_config"] = credentials
 drive = GoogleDrive(gauth)
 
 if not os.path.exists(ARCHIVE_DIR):
@@ -45,31 +60,22 @@ def reset_daily_records():
 def upload_to_drive(file_path):
     """Uploads a file to Google Drive in the 'Hospital_Backups' folder"""
     try:
-        # Check if file exists
         if not file_path or not os.path.exists(file_path):
             return False
         
-        # Check if credentials file exists
-        if not os.path.exists('credentials.json'):
-            print("Google Drive credentials not found. Skipping backup.")
+        if not all([os.getenv("GOOGLE_CLIENT_ID"), os.getenv("GOOGLE_CLIENT_SECRET")]):
+            print("Google Drive credentials not configured. Skipping backup.")
             return False
 
         # Authenticate with Google Drive
-        gauth.LoadCredentialsFile("credentials.json")
         if gauth.credentials is None:
-            # Authenticate if they're not there
             gauth.LocalWebserverAuth()
         elif gauth.access_token_expired:
-            # Refresh them if expired
             gauth.Refresh()
         else:
-            # Initialize the saved creds
             gauth.Authorize()
-        
-        # Save the current credentials
-        gauth.SaveCredentialsFile("credentials.json")
 
-        # Create or get the backup folder
+        # Create or get backup folder
         folder_name = "Hospital_Backups"
         folder_query = f"title='{folder_name}' and mimeType='application/vnd.google-apps.folder' and trashed=false"
         folders = drive.ListFile({'q': folder_query}).GetList()
@@ -105,11 +111,8 @@ def home():
 
 @app.route('/start')
 def start():
-    # Calculate statistics
     opd_count = len(data)
     ipd_count = len(ipd_data)
-    
-    # Calculate total income (convert fees/total_bill to float)
     total_income = sum(float(entry['fees']) for entry in data) + \
                    sum(float(entry['total_bill']) for entry in ipd_data)
     
@@ -132,7 +135,6 @@ def submit():
     }
     data.append(entry)
     
-    # Save records and upload to Google Drive
     archive_file = reset_daily_records()
     if archive_file:
         upload_to_drive(archive_file)
@@ -218,7 +220,6 @@ def ipd():
         }
         ipd_data.append(entry)
         
-        # Save records and upload to Google Drive
         archive_file = reset_daily_records()
         if archive_file:
             upload_to_drive(archive_file)
