@@ -244,6 +244,105 @@
             font-family: 'Inter', sans-serif;
         }
 
+        /* Premium Pop-up Notification */
+        .restore-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            z-index: 10000;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .restore-notification i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #4285F4;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .restore-notification h3 {
+            margin: 0 0 15px 0;
+            font-size: 22px;
+            color: #202124;
+        }
+
+        .restore-notification p {
+            margin: 0 0 25px 0;
+            color: #5f6368;
+            line-height: 1.5;
+        }
+
+        .restore-progress {
+            height: 6px;
+            background: #f1f1f1;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .restore-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4285F4, #34A853);
+            transition: width 0.3s ease;
+        }
+
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .continue-btn {
+            background: #4285F4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .continue-btn:hover {
+            background: #3367D6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
         @media (max-width: 768px) {
             header {
                 font-size: 22px;
@@ -262,6 +361,12 @@
             .stats-container {
                 grid-template-columns: 1fr;
                 gap: 10px;
+            }
+            .restore-notification {
+                padding: 20px;
+            }
+            .restore-notification h3 {
+                font-size: 20px;
             }
         }
     </style>
@@ -305,6 +410,72 @@
         // Check backup status every 30 seconds
         setInterval(updateBackupStatus, 30000);
         updateBackupStatus();
+
+        // Show restoration notification
+        document.addEventListener('DOMContentLoaded', function() {
+            // This would be replaced with actual restoration status from server
+            const isRestoring = true; // Force showing for demo
+            
+            if (isRestoring) {
+                const overlay = document.createElement('div');
+                overlay.className = 'notification-overlay';
+                
+                const notification = document.createElement('div');
+                notification.className = 'restore-notification';
+                notification.innerHTML = `
+                    <i class="fab fa-google-drive"></i>
+                    <h3>Restoring Patient Records</h3>
+                    <p>We're retrieving the latest data from Google Drive. Please wait while we restore your records...</p>
+                    <div class="restore-progress">
+                        <div class="restore-progress-bar" id="restore-progress"></div>
+                    </div>
+                `;
+                
+                document.body.appendChild(overlay);
+                document.body.appendChild(notification);
+                
+                // Show elements
+                overlay.style.display = 'block';
+                notification.style.display = 'block';
+                
+                // Simulate progress (replace with actual progress from server)
+                let progress = 0;
+                const progressBar = document.getElementById('restore-progress');
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 100) progress = 100;
+                    progressBar.style.width = progress + '%';
+                    
+                    if (progress === 100) {
+                        clearInterval(progressInterval);
+                        setTimeout(() => {
+                            notification.innerHTML = `
+                                <i class="fas fa-check-circle" style="color:#34A853"></i>
+                                <h3>Restoration Complete!</h3>
+                                <p>All patient records have been successfully restored from Google Drive.</p>
+                                <button class="continue-btn" onclick="closeNotification()">Continue</button>
+                            `;
+                        }, 500);
+                    }
+                }, 300);
+            }
+
+            // Auto-focus on name field
+            document.querySelector('input[name="name"]').focus();
+        });
+
+        function closeNotification() {
+            const overlay = document.querySelector('.notification-overlay');
+            const notification = document.querySelector('.restore-notification');
+            
+            notification.style.animation = 'fadeOut 0.3s ease';
+            overlay.style.animation = 'fadeOut 0.3s ease';
+            
+            setTimeout(() => {
+                notification.remove();
+                overlay.remove();
+            }, 300);
+        }
     </script>
 </head>
 <body>
